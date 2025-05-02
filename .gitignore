@@ -1,0 +1,79 @@
+# Quartus Prime
+.vimtmp/
+db/
+incremental_db/
+output_files/
+*.rpt
+*.qws
+*.qdf
+*.smsg
+*.sof
+*.pof
+*.jic
+*.ekp
+*.summary
+*.qpf~
+*.qsf~
+*.bak
+*.log
+*.chg
+*.cmp
+*.pin
+*.eqn
+*.html
+*.svd
+*.sld
+*.qdz
+
+# Quartus user files
+*.qar
+*.qpf
+*.qsf
+*.cdf
+*.vcd
+*.smsg
+*.jdi
+*.dpf
+*.jtag
+
+# Simulation output
+*.vcd
+*.lxt
+*.vvp
+*.out
+*.log
+*.wlf
+*.vstf
+*.fst
+*.sim
+
+# ModelSim
+work/
+modelsim.ini
+transcript
+vsim.wlf
+*.vst
+*.mpf
+*.mrf
+*.dat
+*.do~
+
+# Icarus Verilog
+*.vvp
+*.out
+
+# General
+*.swp
+*~
+*.bak
+*.tmp
+*.DS_Store
+*.idea/
+.vscode/
+*.user
+*.lock
+
+# Project-specific builds
+build/
+simulation/
+

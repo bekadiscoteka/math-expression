@@ -1,0 +1,115 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/user1111/Documents/DigitalDesign/solution
+vclk_gen
+Z1 !s110 1746220550
+!i10b 1
+!s100 Iz=ezEIS>dfUP8n0YFZJl3
+IZRn_cSzIklfOMg:hAD6Gb1
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+R0
+Z3 w1746220543
+Z4 8testbench.v
+Z5 Ftestbench.v
+L0 3
+Z6 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z7 !s108 1746220550.000000
+Z8 !s107 design.v|testbench.v|
+Z9 !s90 -reportprogress|300|-work|mylib|testbench.v|
+!i113 1
+Z10 o-work mylib
+Z11 tCvgOpt 0
+vgenerator
+R1
+!i10b 1
+!s100 01MWE@kANKF4lDWz9ShPk2
+I:NS^1LMe=c=R>U3`7DfI41
+R2
+R0
+R3
+R4
+R5
+L0 11
+R6
+r1
+!s85 0
+31
+R7
+R8
+R9
+!i113 1
+R10
+R11
+vmath_expression
+R1
+!i10b 1
+!s100 9SdiM8=kbUn4S_lD8W;E81
+I>]JF7HK[feWc7?h:Db7be1
+R2
+R0
+w1746216701
+8design.v
+Fdesign.v
+L0 3
+R6
+r1
+!s85 0
+31
+R7
+R8
+R9
+!i113 1
+R10
+R11
+vmonitor
+R1
+!i10b 1
+!s100 de^<Dk28UI55X;Z]GR>CQ0
+I`oz`j1Fg<DDJGAd506^gW2
+R2
+R0
+R3
+R4
+R5
+L0 61
+R6
+r1
+!s85 0
+31
+R7
+R8
+R9
+!i113 1
+R10
+R11
+vstimulus
+R1
+!i10b 1
+!s100 _zXbnSQ9<8cRVZ5aWBCff1
+IK?5G5Y[Tzbg92QA9gnXlQ1
+R2
+R0
+R3
+R4
+R5
+L0 142
+R6
+r1
+!s85 0
+31
+R7
+R8
+R9
+!i113 1
+R10
+R11
