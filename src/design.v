@@ -4,7 +4,7 @@
 		parameter W=16 
 	)(
 		output reg signed [W-1:0] q, // quotient 
-		output reg valid, // done tick, availiable for one cycle
+		output reg valid, // done tick, availiable for only one cycle
 				   rmd, // remainder 
 		input signed [W-1:0] a, b, c, d,
 		input clk, reset, start
@@ -12,11 +12,31 @@
 		localparam	IDLE=0,
 					PROC=1;
 
-		reg [1:0] state;
-		reg signed [W-1:0] _a, _b, _c, _d;	// internal registers
+		reg state;
+		reg signed [W-1:0] _a, _b;	// internal registers
+		reg signed [(W-1)+2:0] _c, _d;
 
-		// math expression implementation
-		wire signed [W-1:0] numerator = (((_a - _b) * (1 + (3 * _c))) - (4 * _d));
+		// MATH EXPRESSION IMPLEMENTATION BLOCK STARTS
+
+		wire signed [(W-1)+2:0] _dx4_opt = _d << 2; // _d * 4 optimized
+		wire signed [(W-1)+2:0] _cx3_opt = (_c << 1) + _c; // _c * 3 optimized
+		wire signed [(W-1)+2:0] inc_opt;  //output of increment optimized
+
+		//incrementation optimized version in binary level
+		genvar i;
+		generate 
+			for (i=0; i<=(W-1)+2; i=i+1) begin
+				if (i==0) begin
+				   	assign inc_opt[i] = ~_cx3_opt[i];
+				end
+				else begin
+					assign inc_opt[i] = _cx3_opt[i] ^ &_cx3_opt[i-1:0];  
+				end
+			end
+		endgenerate
+
+
+		wire signed [W-1:0] numerator = (((_a - _b) * inc_opt) - _dx4_opt);
 		wire signed [W-1:0] _q = numerator >>> 1;
 		wire _rmd = numerator[0];
 
@@ -33,7 +53,10 @@
 			else begin
 				if (start) begin
 					state <= PROC;
-					{_a, _b, _c, _d} <= {a, b, c, d}; // sync value receive
+					_a <= a;
+					_b <= b;
+					_c <= c;
+					_d <= d;
 				end
 				else state <= IDLE;
 
