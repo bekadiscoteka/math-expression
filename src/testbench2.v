@@ -1,4 +1,4 @@
-`include "sync_input+output.v"
+`include "sync_input.v"
 `timescale 1ns / 1ns
 module clk_gen(output reg clk);
 	initial begin
@@ -25,7 +25,7 @@ module generator #(
 	integer i;	
 	initial begin
 		do_reset();
-		set(16'd32_768, 16'd32_767, 16'd32_767, 16'd32_767);
+		set(-4, 6, -2, 1);
 		set(3, 3, -3, 3);	
 		set(5, 3, 2, -1);
 		#1 $finish;		
@@ -60,41 +60,32 @@ module monitor #(
 	parameter W=16
 )(
 	input valid, start, clk,
-	input signed [W-1:0] a, b, c, d,
-	input signed [W*2+3:0] q
-
+	input signed [W-1:0] q, a, b, c, d
 );
-	reg signed [W-1:0] _a,_b,_c,_d;
-	reg signed [W*2+3:0] _q;
+	reg signed [W-1:0] _a,_b,_c,_d, _q;
 
 	//checking after receive of valid tick,
 
 	always @(valid) begin
 		while (valid) begin
 			if (q == _q) $display(
-				"passed quo: %d", _q
+				"passed quo: %d, inputs: a=%d b=%d c=%d d=%d", _q, _a, _b, _c, _d
 			);
 			else $display(
-				"failed, quo: %d, required: %d", q, _q,
+				"failed, quo: %d, required: %d  inputs: a=%d b=%d c=%d d=%d", q, _q, 
+				_a, _b, _c, _d
 			);	
 			@(posedge clk);
 		end
 	end
 
-	reg [(W*4)-1:0] start_pack, first_stage_pack;
-
-	//simulating pipelining in higher level
-
 	always @(posedge clk) begin
-		start_pack <= start ? {a, b, c, d} : 0; 		
-		first_stage_pack <= start_pack;
-		{_a, _b, _c, _d} <= first_stage_pack;
-		_q <= math_expr(_a,_b,_c,_d); 
+		{_a,_b,_c,_d, _q} <= start ? {a, b, c, d, math_expr(a, b, c, d)} : 0; 		
 	end
 	
 
-	function signed [511:0] math_expr(
-		input signed [511:0] a, b, c, d
+	function signed [W-1:0] math_expr(
+		input signed [W-1:0] a, b, c, d
 	);
 		begin
 			math_expr = (((a - b) * (1 + (3 * c))) - (4 * d)) / 2;
@@ -103,9 +94,8 @@ module monitor #(
 endmodule
 
 module stimulus;
-	parameter W=16;
-	wire [W-1:0] a, b, c, d;
-	wire [W*2+3:0] q;
+	parameter W=512;
+	wire [W-1:0] q, a, b, c, d;
 	wire start, reset, clk, valid, rmd;
 
 	
