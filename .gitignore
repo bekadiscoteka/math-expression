@@ -11,6 +11,7 @@ output_files/
 *.pof
 *.jic
 *.ekp
+*.json
 *.summary
 *.qpf~
 *.qsf~
