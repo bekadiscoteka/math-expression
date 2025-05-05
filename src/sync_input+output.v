@@ -4,7 +4,7 @@
 		parameter W=32
 	)(
 		output reg signed [(2*W)+3:0] q, // quotient 
-		output reg valid, // done tick, availiable for only one cycle
+		output reg valid, // done tick, availiable for one cycle
 				   rmd, // remainder 
 		input signed [W-1:0] a, b, c, d,
 		input clk, reset, start
@@ -17,11 +17,11 @@
 		reg signed [(W+1)-1:0]	a_minus_b;		// a - b		 
 		reg signed [(W+2)-1:0]	dx4,			// 4*d	
 								temp; 
-		reg signed [((2*W)+3:0]	product;		// (3*c + 1) * (a - b)
+		reg signed [((2*W)+3)-1:0]	product;		// (3*c + 1) * (a - b)
 
 		reg valid_in, valid_stage_1, valid_stage_2;
 
-		wire [((2*W)+3)-1:0] numerator = product - temp;
+		wire signed [(2*W)+3:0] numerator = product - temp;
 
 		always @(posedge clk) begin //sync reset
 			if (reset) begin
@@ -81,7 +81,6 @@
 				q <= numerator >>> 1;
 				rmd <= numerator[0];
 				valid <= valid_stage_2;
-
 			end
 		end		
 	endmodule
