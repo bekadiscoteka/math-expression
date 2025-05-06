@@ -6,6 +6,9 @@ for any questions telegram: @viaBeka
 ----------------------------------
 At this root directory, you can find all required files:
 
+
+
+
 1. Graphical representation
 2. Implementation of design, HDL files, testbenches are provided inside of the "src" folder
 
@@ -35,17 +38,21 @@ vsim -do design_test.do
 to input W. For each stage of pipelining. These bit modifications are clearly shown on 
 graphic scheme   
 
-11. i've prepared python script:
+11.    video demo of top module / python script interaction: https://youtu.be/6_MFEHwTwNE
+
+i've prepared python script:
 script.py
 
 This script takes inputs, transmits input values through UART and  calculates the correct expected result
 
-top.v is provided to use that implemented design.v to calculate result / interact with 
+top.v is provided to use/validate that implemented design.v to calculate result / interact with 
 uart values and display it on 7 segment LED.
 
 top.v takes input values sent by script.py and calculate its own version of
-result and displays on LED. So i implemented, started it on FPGA and
-physically connected UART to laptop, and ran python script. So now implemented
+result and send to python script. On the other hand python will receive that value and compare with
+correct value to conclude correct/fail. So i implemented, started it on FPGA and
+physically connected UART to laptop, and ran python script.Now implemented
 hardware can interact with user, python helps to validate results
 
 12/13 You can find this report on current directory
+

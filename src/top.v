@@ -22,6 +22,9 @@ module top(
 	wire	rx_empty, read;
 
 	wire [7:0] ascii;
+	reg [7:0] ascii_tx;
+	reg write;
+
 	assign read = ~rx_empty;
 
 	uart uart_inst(
@@ -29,10 +32,11 @@ module top(
 		.reset(reset),
 		.rx(rx),
 		.tx(tx),
-		.data_in(),
+		.data_in(ascii_tx),
 		.data_out(ascii),
 		.rx_empty(rx_empty), // rx fifo empty
 		.ready(baund_rate_ready),
+		.wr_data(write),
 		.rd_data(read)
 	);		
 	
@@ -134,6 +138,9 @@ module top(
 		.start(valid)
 	);	
 	reg [15:0] bcd_set; 
+	reg [2:0] state_tx;
+	reg [7:0] sign;
+	localparam SIGN=0, BCD0=1, BCD1=2, BCD2=3, BCD3=4;
 	always @(posedge clk, posedge reset) begin
 		if (reset) begin
 		   bcd_set <= 0;
@@ -142,13 +149,51 @@ module top(
 			sseg4 <= ~8'b0;
 			sseg5 <= ~8'b0;
 			ind <= 0;
+			write <= 0;
+			state_tx <= SIGN;
+			ascii_tx <= 0;
+			sign <= 0;
 		end
 		else begin
 			if (done) begin
 				bcd_set <= {bcd3, bcd2, bcd1, bcd0};
 			end
 			if (start) ind <= 1;
-			if (valid) sseg4 <= q[11] ? 8'b10111111 : ~8'b0;
+			if (valid) begin
+			   	sseg4 <= q[11] ? 8'b10111111 : ~8'b0;
+				sign <= q[11] ? 45 : 0; 
+			end
+			case (state_tx) 
+				BCD3: begin
+					$display("bcd3 state");
+					ascii_tx <= bcd_set[(4*4)-1:(4*4)-4] + 48;	
+					state_tx <= BCD2;
+				end
+				BCD2: begin
+					$display("bcd2 state");
+					ascii_tx <= bcd_set[(4*3)-1:(4*3)-4] + 48;
+					state_tx <= BCD1;
+				end
+				BCD1: begin
+					ascii_tx <= bcd_set[(4*2)-1:(4*2)-4] + 48;
+					state_tx <= BCD0;
+				end
+				BCD0: begin
+					ascii_tx <= bcd_set[(4*1)-1:(4*1)-4] + 48;
+					state_tx <= SIGN;
+				end
+				SIGN: begin
+					if (done) begin
+						state_tx <= BCD3;
+						ascii_tx <= sign;
+						write <= 1;				
+					end
+					else begin
+						ascii_tx <= 0;
+						write <= 0;
+					end
+				end
+			endcase
 		end
 	end
 
