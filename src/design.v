@@ -67,7 +67,7 @@
 				//
 				cx3_plus_1 <= (_c * 3) + 1;
 				a_minus_b <= _a - _b;
-				dx4 <= _d * 4;
+				dx4 <= _d << 2;
 				valid_stage_1 <= valid_in;
 
 				//stage 2

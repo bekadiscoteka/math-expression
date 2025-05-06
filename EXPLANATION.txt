@@ -1,0 +1,51 @@
+---------------------------------
+Author: Yerman Bekzat
+Date: 06.05.2025
+email: yermanbekzat@gmail.com
+for any questions telegram: @viaBeka
+----------------------------------
+At this root directory, you can find all required files:
+
+1. Graphical representation
+2. Implementation of design, HDL files, testbenches are provided inside of the "src" folder
+
+the main design that solves math expression is: 
+	design.v
+c) a, b, c, d signed integers
+d) input/output is syncronized, and also design puts priority on performance
+so i decided to use 3 stage pipelining
+e) bit width is flexible and can be extended to any size at initialization
+with parameter W
+d) because of pipelining, we can pass input at any cycle sequentially, without waiting for
+result. 
+g) latency is optimized
+h) output confirmed with "valid" done tick. Output is availiable only for one
+cycle and then it is reset. When valid tick indicates output is availiable.
+Input is confirmed through start pin. When start is high, input values will
+be sent for calculation
+
+9. main HDL testbench is design_tb.v  
+simulation/verification is done with ModelSim. I've prepared tcl for modelsim simulation: 
+design_test.do
+
+in order to start testbench, run command:
+vsim -do design_test.do
+
+10. Bit overflow is handled by concise extention of output bit width relative
+to input W. For each stage of pipelining. These bit modifications are clearly shown on 
+graphic scheme   
+
+11. i've prepared python script:
+script.py
+
+This script takes inputs, transmits input values through UART and  calculates the correct expected result
+
+top.v is provided to use that implemented design.v to calculate result / interact with 
+uart values and display it on 7 segment LED.
+
+top.v takes input values sent by script.py and calculate its own version of
+result and displays on LED. So i implemented, started it on FPGA and
+physically connected UART to laptop, and ran python script. So now implemented
+hardware can interact with user, python helps to validate results
+
+12/13 You can find this report on current directory
